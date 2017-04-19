@@ -201,6 +201,8 @@ title: 1주차
         - [56페이지 참고]
         - 단일테이블 해쉬 클러스터
         - 인덱스 클러스터에서 설명한 단일테이블 클러스터와 유사.
+        
+
 ## 김민성 : 59 ~ 118 (3.1.2절)
 
 ### 제 2장 인덱스의 유형과 특징
@@ -350,7 +352,7 @@ SUM, AVG 등의 그룹함수는 사용할 수 없다. 이 함수들은 테이블
 
 - 컬럼의 중간 부분의 검색
 
-```
+```sql
 CREATE INDEX from_loc_idx on orders (SUBSTR(ship_id, 5, 3));
  
 CREATE INDEX repair_ord_idx on orders (SUBSTR(ship_id, 3, 2), ord_date);
@@ -358,31 +360,31 @@ CREATE INDEX repair_ord_idx on orders (SUBSTR(ship_id, 3, 2), ord_date);
 
 - 조인 연결고리 컬럼이 대응하지 않는 경우의 해결
 
-```
+```sql
 CREATE INDEX group_cd_idx ON item_group (class1 || class2 || class3);
 ```
 
 - 날짜 컬럼이 분할된 경우의 해결
 
-```
+```sql
 CREATE INDEX sal_date_idx ON sales (sal_yyyy || sal_mm || sal_dd);
 ```
 
 - 데이터 타입이 상이한 조인 컬럼
 
-```
+```sql
 CREATE INDEX deptno_idx ON emp (TO_NUMBER(dept_no));
 ```
 
 - 조인 컬럼이 경우에 따라 달라지는 경우의 조인
 
-```
+```sql
 CREATE INDEX deptno_idx ON sales (CASE WHEN sal_type = 1 THEN sal_dept ELSE agent_no END);
 ```
 
 - 부모 테이블의 컬럼과 결합한 인덱스 생성
 
-```
+```sql
 CREATE or REPLACE FUNCTION get_deptno
 ( v_mov_order in number )
   RETURN varchar2 DETERMINISTIC IS
@@ -403,19 +405,19 @@ CREATE INDEX dept_date_idx ON movement_trans (get_deptno(mov_order), mov_date);
 
 - 대소문자나 공백이 혼재된 컬럼의 검색
 
-```
+```sql
 CREATE INDEX ename_upper_ix ON employees (UPPER(REPLACE(ename, ' ')));
 ```
 
 - NULL 값을 치환하여 검색
 
-```
+```sql
 CREATE INDEX start_end_idx ON account_history (NVL(end_date, '99991231'), start_date);
 ```
 
 - 접두사(Prefix)를 채워서 검색
 
-```
+```sql
 CREATE INDEX call_number_idx ON call_data (DECODE(SUBSTR(call_number, 1, 3), '018', '', '016') || call_number);
 ```
 
@@ -423,13 +425,13 @@ CREATE INDEX call_number_idx ON call_data (DECODE(SUBSTR(call_number, 1, 3), '01
 
 - 복잡한 계산 결과의 검색
 
-```
+```sql
 CREATE INDEX order_amount_idx ON order_items (ITEM_CD, (order_price - nvl(order_discount, 0)) * order_count));
 ```
 
 - 말일, 단가, 율의 검색
 
-```
+```sql
 CREATE INDEX sal_amount_idx ON sales (LAST_DAY(sal_date), sal_amount);
  
 CREATE INDEX price_idx ON sales (ROUND(sal_amount / sal_quantity));
@@ -437,7 +439,7 @@ CREATE INDEX price_idx ON sales (ROUND(sal_amount / sal_quantity));
 
 - 기간, 컬럼 길이 검색
 
-```
+```sql
 CREATE INDEX term_idx ON activities (expire_date - start_date);
  
 CREATE INDEX source_length_idx ON print_media (text_length(source_text));
@@ -445,7 +447,7 @@ CREATE INDEX source_length_idx ON print_media (text_length(source_text));
 
 **라. 오브젝트 타입의 인덱스 검색**
 
-```
+```sql
 CREATE INDEX volume_idx ON cube_tab x (x.volume());
 ```
 
@@ -453,7 +455,7 @@ CREATE INDEX volume_idx ON cube_tab x (x.volume());
 
 - 배타적 관계의 유일성 보장
 
-```
+```sql
 CREATE UNIQUE INDEX official_id_idx ON customers (CASE WHEN cust_type = 1 THEN resident_id ELSE business_id END);
  
 CREATE UNIQUE INDEX contract_idx ON insurance (CASE WHEN ins_type = 'A01' THEN customeer_id ELSE NULL END, CASE WHEN ins_type = 'A01' THEN ins_type ELSE NULL END);
@@ -461,7 +463,7 @@ CREATE UNIQUE INDEX contract_idx ON insurance (CASE WHEN ins_type = 'A01' THEN c
 
 - 배타적 관계의 결합 인덱스
 
-```
+```sql
 CREATE INDEX order_delivery_idx1 ON order_delivery (order_dept, CASE WHEN ord_type = 1 THEN delivery_date ELSE shipping_date END, item_type);
 ```
 
