@@ -7,7 +7,7 @@ title: 3주차
 
 ### 3.2.4.1. 조건 연산자별 비트맵 실행계획
 
-
+![image1](https://github.com/nice21cy/study-database-solution/blob/master/images/db1.JPG)
 
 
 
@@ -43,6 +43,8 @@ AND 조건 실행계획과 동일
 
 등식 조건의 엑세스 수행 결과를 'BITMAP MINUS' 를 통하여 제거 처리  
 해당 컬럼이 NULL을 포함 시 NULL 값을 제거하는 작업 추가  
+
+![sdf](https://github.com/nice21cy/study-database-solution/blob/master/images/db2.JPG)
 
 바) NULL 비교 실행계획
 
