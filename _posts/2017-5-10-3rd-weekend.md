@@ -10,7 +10,13 @@ title: 3주차
 ![image1](https://github.com/nice21cy/study-database-solution/blob/master/images/db1.JPG)
 
 
-
+```
+비트맵인덱스 생성 절차
+1. 인덱스를 생성하고자 하는 컬럼의 값들을 찾기 위해 테이블 스캔을 한 후 
+2. bitmap generator에 의해 컬럼값, start rowid, end rowid , bitmap을 갖는 인덱스 엔트리를 생성한다. 
+3. 2단계에서 생성된 Bitmap들을 B-tree구조에 넣기 쉽도록 key값과 start rowid 순으로 정렬한다.
+4. 마지막 단계에서는 정렬된 인덱스 엔트리들을 단순히 B-tree구조로 삽입한다.
+```
 
 
 가) 동치(Equal) 비교 실행계획
